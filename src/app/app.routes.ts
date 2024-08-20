@@ -40,5 +40,5 @@ export const routes: Routes = [
     loadComponent: () => import('./countries/pages/country-page/country-page.component')
   },
 
-  {path: '**', redirectTo: 'home', pathMatch: 'full'}
+  {path: '**', redirectTo: 'countries/by-capital', pathMatch: 'full'}
 ];
