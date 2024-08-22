@@ -1,0 +1,16 @@
+.spiner-container {
+  align-items: center;
+  background-color: #106cfc;
+  border-radius: 20px;
+  bottom: 15px;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.4);
+  color: white;
+  display: flex;
+  padding: 5px 10px;
+  position: fixed;
+  right: 15px;
+}
+
+span {
+  margin-left: 5px;
+}
