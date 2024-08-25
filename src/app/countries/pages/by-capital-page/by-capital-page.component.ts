@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { SearchBoxComponent } from '../../../shared/components/search-box/search-box.component';
@@ -22,12 +22,18 @@ import { CommonModule } from '@angular/common';
 ],
   templateUrl: './by-capital-page.component.html',
 })
-export default class ByCapitalPageComponent {
+export default class ByCapitalPageComponent implements OnInit {
 
-  public countries: Country[] = [];
-  public isLoading: boolean = false;
+  public countries:     Country[] = [];
+  public isLoading:     boolean = false;
+  public initialValue?: string;
 
-  constructor(private countriesService: CountriesService) {};
+  constructor(private countriesService: CountriesService) {}
+
+  ngOnInit(): void {
+    this.countries    = this.countriesService.cacheStore.byCapital.countries;
+    this.initialValue = this.countriesService.cacheStore.byCapital.term;
+  };
 
   searchByCapital( term: string ):void {
 

@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, map, of, delay } from 'rxjs';
+import { catchError, Observable, map, of, tap } from 'rxjs';
 import { Country } from '../interfaces/country';
+import { CacheStore } from '../interfaces/cache-store.interface';
+import { Region } from '../interfaces/region.type';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +11,12 @@ import { Country } from '../interfaces/country';
 export class CountriesService {
 
   private apiURL: string = 'https://restcountries.com/v3.1';
+
+  public  cacheStore: CacheStore = {
+    byCapital: { term:   '', countries: [] },
+    byCountry: { term:   '', countries: [] },
+    byRegion:  { region: '', countries: [] },
+  };
 
   constructor(private http: HttpClient) { }
 
@@ -26,8 +34,7 @@ export class CountriesService {
 
      return this.http.get<Country[]>(`${ this.apiURL }/capital/${ term }`)
       .pipe(
-        catchError( () => of([]) ),
-        // delay( 2000 )
+        tap( countries => this.cacheStore.byCapital = { term, countries } ) // term: term, countries: countries ---> es redundante
       );
 
   }
@@ -36,16 +43,16 @@ export class CountriesService {
 
     return this.http.get<Country[]>(`${ this.apiURL }/name/${ term }`)
      .pipe(
-       catchError( () => of([]) )
+      tap( countries => this.cacheStore.byCountry = { term, countries } )
      );
 
  }
 
- searchRegion( term: string ):Observable<Country[]> {
+ searchRegion( region: Region ):Observable<Country[]> {
 
-  return this.http.get<Country[]>(`${ this.apiURL }/region/${ term }`)
+  return this.http.get<Country[]>(`${ this.apiURL }/region/${ region }`)
    .pipe(
-     catchError( () => of([]) )
+    tap( countries => this.cacheStore.byRegion = { region, countries } )
    );
 
 }
